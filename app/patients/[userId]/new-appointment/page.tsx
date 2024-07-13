@@ -5,8 +5,14 @@ import Image from "next/image";
 import AppointmentForm from "@/components/forms/AppointmentForm";
 import { getPatient } from "@/lib/actions/patient.actions";
 
+import * as Sentry from '@sentry/nextjs'
+
 export default async function NewAppointment({params:{userId}}:SearchParamProps) {
   const patient = await getPatient(userId);
+
+    Sentry.metrics.set("user_view_new-appointment",patient.name);
+
+
   return (
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container my-auto">
@@ -22,7 +28,7 @@ export default async function NewAppointment({params:{userId}}:SearchParamProps)
             /> <h1 className="text-2xl text-white font-semibold">MedCarePlus</h1></div>
           <AppointmentForm type="create" userId={userId} patientId={patient.$id}/>
           
-            <p className="justify-items-end text-dark-600 xl:text-left">© 2024 MedCarePlus</p>
+            <p className="copyright mt-10 py-12">© 2024 MedCarePlus</p>
            
         </div>
       </section>
